@@ -33,7 +33,7 @@ public class FilesStorageServiceImpl implements FilesStorageService {
     try {
       Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
 
-      String baseUrl = "http://localhost:8080/";
+      String baseUrl = "http://localhost:8080/api/";
       String relativePath = this.root.resolve(file.getOriginalFilename()).toString();
 
       return baseUrl + relativePath;

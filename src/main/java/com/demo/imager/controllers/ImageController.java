@@ -2,6 +2,7 @@ package com.demo.imager.controllers;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -15,8 +16,9 @@ import com.demo.imager.models.Image;
 import com.demo.imager.services.ImageService;
 import com.demo.imager.services.FilesStorageService;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
-@RequestMapping("/api/images/")
+@RequestMapping("/api/")
 public class ImageController {
 
   private final ImageService imageService;
@@ -35,8 +37,19 @@ public class ImageController {
     return new ResponseEntity<>(images, HttpStatus.OK);
   }
 
+  @GetMapping("/images/{id}")
+  public ResponseEntity<Image> getImageById(@PathVariable("id") String id) {
+    Optional<Image> imageData = imageService.findById(id);
+
+    if (imageData.isPresent()) {
+      return new ResponseEntity<>(imageData.get(), HttpStatus.OK);
+    } else {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+  }
+
   // Serve image
-  @GetMapping("/files/{filename:.+}")
+  @GetMapping("/uploads/{filename:.+}")
   @ResponseBody
   public ResponseEntity<Resource> getFile(@PathVariable String filename) {
     Resource file = storageService.load(filename);

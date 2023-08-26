@@ -9,6 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ImageService {
@@ -43,5 +44,11 @@ public class ImageService {
 
   public List<Image> getAllImages() {
     return imageRepository.findAll();
+  }
+
+  public Optional<Image> findById(String id) {
+    Optional<Image> image = imageRepository.findById(id);
+
+    return image;
   }
 }
