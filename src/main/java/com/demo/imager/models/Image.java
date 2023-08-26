@@ -15,4 +15,5 @@ public class Image {
   String filename;
   String contentType;
   String uploadedAt;
+  String url;
 }
