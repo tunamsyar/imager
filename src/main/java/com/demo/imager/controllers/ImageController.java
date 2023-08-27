@@ -1,7 +1,10 @@
 package com.demo.imager.controllers;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.core.io.Resource;
@@ -12,7 +15,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+
 import com.demo.imager.models.Image;
+import com.demo.imager.repositories.ImageRepository;
 import com.demo.imager.services.ImageService;
 import com.demo.imager.services.FilesStorageService;
 
@@ -25,16 +33,37 @@ public class ImageController {
   private final FilesStorageService storageService;
 
   @Autowired
-  public ImageController(ImageService imageService, FilesStorageService storageService) {
+  public ImageController(ImageService imageService,
+      FilesStorageService storageService) {
     this.imageService = imageService;
     this.storageService = storageService;
   }
 
+  @Autowired
+  ImageRepository imageRepository;
+
   // For gallery
   @GetMapping("/images")
-  public ResponseEntity<List<Image>> getAllImages() {
-    List<Image> images = imageService.getAllImages();
-    return new ResponseEntity<>(images, HttpStatus.OK);
+  public ResponseEntity<Map<String, Object>> getAllImagesPage(
+      @RequestParam(defaultValue = "0") int page,
+      @RequestParam(defaultValue = "3") int size) {
+
+    List<Image> images = new ArrayList<Image>();
+    Pageable paging = PageRequest.of(page, size);
+
+    Page<Image> pageImages;
+    pageImages = imageRepository.findAll(paging);
+
+    images = pageImages.getContent();
+
+    Map<String, Object> response = new HashMap<>();
+
+    response.put("images", images);
+    response.put("currentPage", pageImages.getNumber());
+    response.put("totalItems", pageImages.getTotalElements());
+    response.put("totalPages", pageImages.getTotalPages());
+
+    return new ResponseEntity<>(response, HttpStatus.OK);
   }
 
   @GetMapping("/images/{id}")
