@@ -96,4 +96,15 @@ public class ImageController {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
   }
+
+  // Delete
+  @DeleteMapping("images/{id}")
+  public ResponseEntity<HttpStatus> deleteImage(@PathVariable("id") String id) {
+    try {
+      imageRepository.deleteById(id);
+      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    } catch (Exception e) {
+      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
 }
