@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.gridfs.GridFsResource;
 
 import com.demo.imager.models.Image;
 import com.demo.imager.repositories.ImageRepository;
@@ -30,13 +30,11 @@ import com.demo.imager.services.FilesStorageService;
 public class ImageController {
 
   private final ImageService imageService;
-  private final FilesStorageService storageService;
 
   @Autowired
   public ImageController(ImageService imageService,
       FilesStorageService storageService) {
     this.imageService = imageService;
-    this.storageService = storageService;
   }
 
   @Autowired
@@ -77,20 +75,24 @@ public class ImageController {
     }
   }
 
-  // Serve image
-  @GetMapping("/uploads/{filename:.+}")
+  @GetMapping("/uploads/{id}")
   @ResponseBody
-  public ResponseEntity<Resource> getFile(@PathVariable String filename) {
-    Resource file = storageService.load(filename);
-    return ResponseEntity.ok()
-        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+  public ResponseEntity<GridFsResource> getImage(@PathVariable String id) {
+    GridFsResource file;
+    try {
+      file = imageService.downloadImage(id);
+      return ResponseEntity.ok()
+          .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFilename() + "\"").body(file);
+    } catch (IOException e) {
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
   }
 
   // Upload
   @PostMapping("/upload")
   public ResponseEntity<Image> uploadFile(@RequestParam("file") MultipartFile file) {
     try {
-      Image metadata = imageService.uploadFile(file);
+      Image metadata = imageService.uploadImage(file);
       return ResponseEntity.status(HttpStatus.CREATED).body(metadata);
     } catch (IOException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

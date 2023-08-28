@@ -1,4 +1,4 @@
-package com.demo.imager.services;
+package com.demo.imager.services.impl;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -13,6 +13,8 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.demo.imager.services.FilesStorageService;
 
 @Service
 public class FilesStorageServiceImpl implements FilesStorageService {
