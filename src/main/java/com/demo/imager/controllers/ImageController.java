@@ -22,7 +22,7 @@ import org.springframework.data.mongodb.gridfs.GridFsResource;
 import com.demo.imager.models.Image;
 import com.demo.imager.repositories.ImageRepository;
 import com.demo.imager.services.ImageService;
-import com.demo.imager.services.FilesStorageService;
+import com.demo.imager.validators.FileExtensionValidator;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
@@ -30,11 +30,13 @@ import com.demo.imager.services.FilesStorageService;
 public class ImageController {
 
   private final ImageService imageService;
+  private final FileExtensionValidator validator;
 
   @Autowired
   public ImageController(ImageService imageService,
-      FilesStorageService storageService) {
+      FileExtensionValidator validator) {
     this.imageService = imageService;
+    this.validator = validator;
   }
 
   @Autowired
@@ -92,8 +94,12 @@ public class ImageController {
   @PostMapping("/upload")
   public ResponseEntity<Image> uploadFile(@RequestParam("file") MultipartFile file) {
     try {
-      Image metadata = imageService.uploadImage(file);
-      return ResponseEntity.status(HttpStatus.CREATED).body(metadata);
+      if (validator.validateContentType(file.getContentType())) {
+        Image metadata = imageService.uploadImage(file);
+        return ResponseEntity.status(HttpStatus.CREATED).body(metadata);
+      } else {
+        return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).build();
+      }
     } catch (IOException e) {
       return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }

@@ -2,7 +2,6 @@ package com.demo.imager.services;
 
 import java.io.IOException;
 
-import org.apache.tomcat.util.file.ConfigurationSource.Resource;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.query.Criteria;
