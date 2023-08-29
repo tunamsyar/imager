@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,17 +28,14 @@ import com.demo.imager.validators.FileExtensionValidator;
 @CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping("/api/")
+@Controller
 public class ImageController {
 
-  private final ImageService imageService;
-  private final FileExtensionValidator validator;
+  @Autowired
+  FileExtensionValidator validator;
 
   @Autowired
-  public ImageController(ImageService imageService,
-      FileExtensionValidator validator) {
-    this.imageService = imageService;
-    this.validator = validator;
-  }
+  ImageService imageService;
 
   @Autowired
   ImageRepository imageRepository;

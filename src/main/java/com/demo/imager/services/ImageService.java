@@ -17,19 +17,13 @@ import java.util.Optional;
 
 @Service
 public class ImageService {
-  private final ImageRepository imageRepository;
   private final Path root = Paths.get("uploads");
-
-  @Autowired
-  FilesStorageService filesStorageService;
 
   @Autowired
   ImageStorageService imageStorageService;
 
   @Autowired
-  public ImageService(ImageRepository imageRepository) {
-    this.imageRepository = imageRepository;
-  }
+  ImageRepository imageRepository;
 
   public Image uploadImage(MultipartFile file) throws IOException {
     String filename = file.getOriginalFilename();

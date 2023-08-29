@@ -38,18 +38,21 @@ public class ImageServiceTest {
 
   @BeforeEach
   public void setUp() {
-    imageService = new ImageService(imageRepository);
+    imageService = new ImageService();
     imageService.imageStorageService = imageStorageService;
+    imageService.imageRepository = imageRepository;
   }
 
   @Test
   public void testUploadImage() throws IOException {
-    MultipartFile mockFile = new MockMultipartFile("test.jpg", "test.jpg", "image/jpeg", new byte[0]);
+    MultipartFile mockFile = new MockMultipartFile("test.jpg", "test.jpg",
+        "image/jpeg", new byte[0]);
 
     when(imageRepository.save(any(Image.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
     String fileId = new ObjectId().toString();
-    when(imageStorageService.addImage(any(String.class), any(MultipartFile.class))).thenReturn(fileId);
+    when(imageStorageService.addImage(any(String.class),
+        any(MultipartFile.class))).thenReturn(fileId);
 
     Image uploadedImage = imageService.uploadImage(mockFile);
 
