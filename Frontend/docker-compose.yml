@@ -1,0 +1,12 @@
+version: '3'
+services:
+  imager_frontend_service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: imager_frontend
+    ports:
+      - 4200:4200
+    volumes:
+      - .:/home/app
+      - /home/app/node_modules

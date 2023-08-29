@@ -1,0 +1,30 @@
+<button class="btn btn-primary" (click)="handleToUpload()">
+  Upload Image
+</button>
+<div class="row">
+  <div class="col-5"></div>
+  <div class="col-7">
+    <pagination-controls previousLabel="Prev" nextLabel="Next" [responsive]="true"
+      (pageChange)="handlePageChange($event)"></pagination-controls>
+  </div>
+</div>
+<div class="row">
+  <div class="col-4 mb-5" *ngFor="
+  let image of images | paginate : {
+                  itemsPerPage: pageSize,
+                  currentPage: page,
+                  totalItems: count
+                };
+          let i = index">
+
+    <p class="text-center">
+      {{image.filename}}
+    </p>
+
+    <a role="button">
+      <div class="container-fluid">
+        <img src={{image.url}} class="img-fluid img-thumbnail" routerLink="/images/{{image.id}}">
+      </div>
+    </a>
+  </div>
+</div>
