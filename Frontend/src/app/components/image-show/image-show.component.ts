@@ -36,6 +36,10 @@ export class ImageShowComponent {
     });
   }
 
+  returnImages(): void {
+    this.router.navigate(["/images"]);
+  }
+
   getImage(id: string): void {
     this.imageService.getImage(id)
     .subscribe({

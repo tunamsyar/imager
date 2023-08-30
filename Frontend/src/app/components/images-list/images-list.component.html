@@ -17,14 +17,19 @@
                 };
           let i = index">
 
-    <p class="text-center">
-      {{image.filename}}
-    </p>
+    <div class="card">
 
-    <a role="button">
-      <div class="container-fluid">
-        <img src={{image.url}} class="img-fluid img-thumbnail" routerLink="/images/{{image.id}}">
+
+      <a role="button">
+        <div class="card-img-top">
+          <img src={{image.url}} class="img-fluid img-thumbnail" routerLink="/images/{{image.id}}">
+        </div>
+      </a>
+      <div class="card-body">
+        <p class="text-center">
+          {{image.filename}}
+        </p>
       </div>
-    </a>
+    </div>
   </div>
 </div>
