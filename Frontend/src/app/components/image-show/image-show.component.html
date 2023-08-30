@@ -4,31 +4,16 @@
 <button class="btn btn-danger" (click)="deleteImage()">
   Delete image
 </button>
-<div class="row">
-  <div class="col-4">
-    <div class="row">
-      <div class="col-4">
-        Filename:
-      </div>
-      <div class="col-8">
-        {{image.filename}}
-      </div>
+<div class="row p-5">
+  <div class="card col-4">
+    <div class="card-body">
+      Filename: {{image.filename}}
     </div>
-    <div class="row">
-      <div class="col-4">
-        Content Type:
-      </div>
-      <div class="col-8">
-        {{image.contentType}}
-      </div>
+    <div class="card-body">
+      Content Type: {{image.contentType}}
     </div>
-    <div class="row">
-      <div class="col-4">
-        Uploaded at:
-      </div>
-      <div class="col-8">
-        {{image.uploadedAt}}
-      </div>
+    <div class="card-body">
+      Uploaded at: {{image.uploadedAt}}
     </div>
   </div>
 </div>
